@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Clonar el repositorio del código fuente
+                checkout scm
+            }
+        }
+
+        stage('Build API Image') {
+            steps {
+                script {
+                    // Construir la imagen Docker para la API
+                    sh 'docker-compose build api'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                script {
+                    // Levantar los contenedores y ejecutar las pruebas
+                    sh 'docker-compose up --abort-on-container-exit'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Limpiar los contenedores y recursos Docker
+            script {
+                sh 'docker-compose down --volumes'
+            }
+        }
+        success {
+            echo 'Pipeline ejecutada con éxito.'
+        }
+        failure {
+            echo 'Hubo un error en la ejecución del pipeline.'
+        }
+    }
+}
