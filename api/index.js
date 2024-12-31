@@ -11,7 +11,7 @@ app.get('/status', (req, res) => {
 
 // Endpoint para ejecutar el script de K6
 app.get('/run-test-1', (req, res) => {
-  const command = 'docker exec -it pam-integration-tests-services_k6_1 k6 run /scripts/script1.js';
+  const command = 'docker exec k6-container k6 run /scripts/script1.js';
 
   exec(command, (error, stdout, stderr) => {
     if (error) {
@@ -31,5 +31,11 @@ app.get('/run-test-1', (req, res) => {
 
 // Iniciar la API
 app.listen(PORT, () => {
+  console.log(`---------------------------------------------------`);
   console.log(`API corriendo en http://localhost:${PORT}`);
+  console.log(`Verifica el status: http://localhost:${PORT}/status`);
+  console.log(`---------------------------------------------------`);
+  console.log(`Test disponibles para ejecutar:`);
+  console.log(`Test1: http://localhost:${PORT}/run-test-1`);
+  console.log(`---------------------------------------------------`);
 });

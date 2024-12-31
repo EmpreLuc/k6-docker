@@ -1,6 +1,17 @@
 # Dockerfile para la API
 FROM node:18
 
+# Instalar dependencias necesarias para Docker
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release \
+    && curl -fsSL https://get.docker.com -o get-docker.sh \
+    && sh get-docker.sh \
+    && rm get-docker.sh
+
 # Crear y establecer el directorio de trabajo
 WORKDIR /usr/src/app
 
